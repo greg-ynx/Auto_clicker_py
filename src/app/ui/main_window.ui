@@ -36,17 +36,29 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>60</height>
+       </size>
+      </property>
       <property name="title">
        <string notr="true">Click interval</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="hours_horizontalLayout">
          <item>
-          <widget class="QSpinBox" name="spinBox"/>
+          <widget class="QSpinBox" name="hours_spinBox"/>
          </item>
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="hours_label">
            <property name="text">
             <string>hours</string>
            </property>
@@ -55,12 +67,12 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="mins_horizontalLayout">
          <item>
-          <widget class="QSpinBox" name="spinBox_2"/>
+          <widget class="QSpinBox" name="mins_spinBox"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="mins_label">
            <property name="text">
             <string>mins</string>
            </property>
@@ -69,12 +81,12 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="secs_horizontalLayout">
          <item>
-          <widget class="QSpinBox" name="spinBox_3"/>
+          <widget class="QSpinBox" name="secs_spinBox"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="secs_label">
            <property name="text">
             <string>secs</string>
            </property>
@@ -83,12 +95,19 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <layout class="QHBoxLayout" name="ms_horizontalLayout">
          <item>
-          <widget class="QSpinBox" name="spinBox_4"/>
+          <widget class="QSpinBox" name="ms_spinBox">
+           <property name="maximum">
+            <number>999</number>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="ms_label">
            <property name="text">
             <string>milliseconds</string>
            </property>
@@ -109,19 +128,19 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <layout class="QHBoxLayout" name="mouseButton_horizontalLayout">
             <item>
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="mouseButton_label">
               <property name="text">
                <string>Mouse button:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox"/>
+             <widget class="QComboBox" name="mouseButton_comboBox"/>
             </item>
             <item>
-             <spacer name="horizontalSpacer">
+             <spacer name="mouseButton_horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -139,19 +158,19 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <layout class="QHBoxLayout" name="clickType_horizontalLayout">
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="clickType_label">
               <property name="text">
                <string>Click type:</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox_2"/>
+             <widget class="QComboBox" name="clickType_comboBox"/>
             </item>
             <item>
-             <spacer name="horizontalSpacer_2">
+             <spacer name="clickType_horizontalSpacer">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -194,9 +213,9 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_13">
+           <layout class="QHBoxLayout" name="clickRepeat_horizontalLayout">
             <item>
-             <widget class="QRadioButton" name="radioButton_4">
+             <widget class="QRadioButton" name="clickRepeat_radioButton">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -215,10 +234,23 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_7"/>
+             <widget class="QSpinBox" name="clickRepeat_spinBox">
+              <property name="minimumSize">
+               <size>
+                <width>60</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_9">
+             <widget class="QLabel" name="clickRepeat_label">
               <property name="text">
                <string>times</string>
               </property>
@@ -227,7 +259,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QRadioButton" name="radioButton_3">
+           <widget class="QRadioButton" name="repeatUS_radioButton">
             <property name="text">
              <string>Repeat until stopped</string>
             </property>
@@ -247,12 +279,24 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>70</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>70</height>
+       </size>
+      </property>
       <property name="title">
        <string notr="true">Cursor position</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
        <item>
-        <widget class="QRadioButton" name="radioButton_2">
+        <widget class="QRadioButton" name="currentLocation_radioButton">
          <property name="maximumSize">
           <size>
            <width>150</width>
@@ -268,9 +312,9 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <layout class="QHBoxLayout" name="pickLocation_horizontalLayout">
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="pickLocation_radioButton">
            <property name="maximumSize">
             <size>
              <width>15</width>
@@ -289,7 +333,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pickLocation_button">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -302,9 +346,9 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <layout class="QHBoxLayout" name="x_horizontalLayout">
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="x_label">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -326,7 +370,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox_5">
+            <widget class="QSpinBox" name="x_spinBox">
              <property name="minimumSize">
               <size>
                <width>60</width>
@@ -344,9 +388,9 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <layout class="QHBoxLayout" name="y_horizontalLayout">
            <item>
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="y_label">
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -368,7 +412,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox_6">
+            <widget class="QSpinBox" name="y_spinBox">
              <property name="minimumSize">
               <size>
                <width>60</width>
@@ -401,6 +445,21 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
         <widget class="QPushButton" name="stop_button">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Stop (F6)</string>
          </property>
@@ -408,6 +467,18 @@
        </item>
        <item row="0" column="0">
         <widget class="QPushButton" name="start_button">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Start (F6)</string>
          </property>
@@ -415,6 +486,18 @@
        </item>
        <item row="1" column="0">
         <widget class="QPushButton" name="hotkey_setting_button">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Hotkey setting</string>
          </property>
@@ -422,6 +505,18 @@
        </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="close_button">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Close</string>
          </property>
