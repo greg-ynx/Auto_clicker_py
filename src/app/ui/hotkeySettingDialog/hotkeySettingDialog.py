@@ -15,6 +15,8 @@ class Ui_hotkeySetting_Dialog(object):
     def setupUi(self, hotkeySetting_Dialog):
         hotkeySetting_Dialog.setObjectName("hotkeySetting_Dialog")
         hotkeySetting_Dialog.resize(320, 240)
+        hotkeySetting_Dialog.setMinimumSize(QtCore.QSize(320, 240))
+        hotkeySetting_Dialog.setMaximumSize(QtCore.QSize(320, 240))
         self.hotkeySetting_buttonBox = QtWidgets.QDialogButtonBox(hotkeySetting_Dialog)
         self.hotkeySetting_buttonBox.setGeometry(QtCore.QRect(10, 200, 301, 32))
         self.hotkeySetting_buttonBox.setOrientation(QtCore.Qt.Horizontal)
