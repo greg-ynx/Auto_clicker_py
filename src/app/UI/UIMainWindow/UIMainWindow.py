@@ -2,7 +2,10 @@
 
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
+from pynput.mouse import Button, Controller
 from config.definitions import img_dir
+from pynput.keyboard import Listener
+from src.app._Service.AutoClickerService import AutoClickerService
 from src.app._Service.ParametersService import ParametersService
 
 
@@ -25,6 +28,8 @@ class UIMainWindow(object):
         MainWindow.setBaseSize(QtCore.QSize(435, 340))
 
         self.params = ParametersService()
+        self.mouse = Controller()
+        self.thread = None
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(img_dir, "icon.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -269,8 +274,13 @@ class UIMainWindow(object):
         self.stop_pushButton.setEnabled(True)
         self.setAllEnabled(False)
         self.attribute_params()
+        self.thread = AutoClickerService(self.mouse, self.params.click_interval, self.params.mouse_button)
+        self.thread.start()
+        with Listener(on_press=on_press) as listener:
+            listener.join()
 
     def stop(self):
+        self.thread.exit()
         self.stop_pushButton.setEnabled(False)
         self.start_pushButton.setEnabled(True)
         self.setAllEnabled(True)
@@ -285,8 +295,8 @@ class UIMainWindow(object):
 
     def attribute_params(self):
         self.params.click_interval = self.seconds_count()
-        self.params.mouse_button = self.mouseButton_comboBox.value()
-        self.params.click_type = self.clickType_comboBox.value()
+        self.params.mouse_button = self.params.mouseButton_switch(self.mouseButton_comboBox.currentText())
+        self.params.click_type = self.clickType_comboBox.currentText()
         self.params.repeat_until_stopped = True
         if not self.repeatUntilStopped_radioButton.isChecked():
             self.params.repeat_until_stopped = False
