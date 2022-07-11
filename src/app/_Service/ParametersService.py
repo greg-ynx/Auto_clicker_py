@@ -16,13 +16,28 @@ class ParametersService:
             self.cursor_X = cursor_X
             self.cursor_Y = cursor_Y
 
+    def clickType_switch(self, click_type):
+        try:
+            match click_type:
+                case "Single":
+                    self.click_type = 1
+                case "Double":
+                    self.click_type = 2
+                case _:
+                    raise AttributeError
+        except AttributeError:
+            print("ClickTypeSwitchError : Wrong click type input")
+
     def mouseButton_switch(self, mouse_button):
-        match mouse_button:
-            case "Left":
-                return Button.left
-            case "Right":
-                return Button.right
-            case "Middle":
-                return Button.middle
-            case _:
-                raise ValueError
+        try:
+            match mouse_button:
+                case "Left":
+                    return Button.left
+                case "Right":
+                    return Button.right
+                case "Middle":
+                    return Button.middle
+                case _:
+                    raise AttributeError
+        except AttributeError:
+            print("MouseButtonSwitchError : Wrong mouse button input")
