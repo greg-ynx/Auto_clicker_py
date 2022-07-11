@@ -175,7 +175,17 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="repeat_spinBox"/>
+            <widget class="QSpinBox" name="repeat_spinBox">
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>999999999</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="repeat_label">
