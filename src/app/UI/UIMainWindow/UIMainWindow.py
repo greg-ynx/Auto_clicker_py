@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
-
 import os
 import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QIntValidator
-from pynput.mouse import Controller
-from config.definitions import img_dir
 from pynput.keyboard import Listener, Key
+from pynput.mouse import Controller
+from screeninfo import get_monitors
+
+from config.definitions import img_dir
 from src.app._Service.AutoClickerService import AutoClickerService
 from src.app._Service.ParametersService import ParametersService
-from screeninfo import get_monitors
 
 
 class UIMainWindow(object):

@@ -1,7 +1,5 @@
-import time
 import threading
-from pynput.mouse import Button, Controller
-from pynput.keyboard import Listener, Key
+import time
 
 
 class AutoClickerService(threading.Thread):
@@ -40,14 +38,14 @@ class AutoClickerService(threading.Thread):
     def run(self):
         i = 0
         while self.program_run:
-            while self.running:
-                if self.times is not None:
-                    while i < self.times:
-                        if not self.running:
-                            break
-                        self.run_click()
-                        i += 1
-                    self.stop_clicking()
-                else:
+            if self.times is not None:
+                while i < self.times:
+                    if not self.running:
+                        break
+                    self.run_click()
+                    i += 1
+                self.stop_clicking()
+            else:
+                while self.running:
                     self.run_click()
             time.sleep(0.1)
