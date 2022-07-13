@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import os
-import time
 import threading
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from pynput.mouse import Button, Controller
+from PyQt5.QtGui import QIntValidator
+from pynput.mouse import Controller
 from config.definitions import img_dir
 from pynput.keyboard import Listener, Key
 from src.app._Service.AutoClickerService import AutoClickerService
 from src.app._Service.ParametersService import ParametersService
+from screeninfo import get_monitors
 
 
 class UIMainWindow(object):
 
     def setupUi(self, MainWindow):
+        global monitor_width, monitor_height
         MainWindow.setObjectName("MainWindow")
         MainWindow.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         MainWindow.setEnabled(True)
@@ -29,6 +31,12 @@ class UIMainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(435, 340))
         MainWindow.setMaximumSize(QtCore.QSize(435, 340))
         MainWindow.setBaseSize(QtCore.QSize(435, 340))
+
+        for m in get_monitors():
+            if m.is_primary:
+                monitor_width = m.width
+                monitor_height = m.height
+                break
 
         self.params = ParametersService()
         self.mouse = Controller()
@@ -210,6 +218,7 @@ class UIMainWindow(object):
         self.X_lineEdit.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.X_lineEdit.setReadOnly(True)
         self.X_lineEdit.setObjectName("X_lineEdit")
+        self.X_lineEdit.setValidator(QIntValidator(0, monitor_width))
         self.horizontalLayout_2.addWidget(self.X_lineEdit)
 
         self.Y_label = QtWidgets.QLabel(self.cursorPosition_groupBox)
@@ -227,6 +236,7 @@ class UIMainWindow(object):
         self.Y_lineEdit.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
         self.Y_lineEdit.setReadOnly(True)
         self.Y_lineEdit.setObjectName("Y_lineEdit")
+        self.Y_lineEdit.setValidator(QIntValidator(0, monitor_height))
         self.horizontalLayout_2.addWidget(self.Y_lineEdit)
 
         self.verticalLayout.addWidget(self.cursorPosition_groupBox)
@@ -286,7 +296,6 @@ class UIMainWindow(object):
                self.ms_spinBox.value() * 10 ** (-3)
 
     def on_press(self, key):
-        print('key pressed')
         start_stop_key = Key.f6
         if key == start_stop_key:
             threading.Thread(target=self.hotkeyThread_start).start()
@@ -314,8 +323,6 @@ class UIMainWindow(object):
                                          self.params.click_type,
                                          self.params.cursor_X,
                                          self.params.cursor_Y)
-        print(self.params.times)
-        print(self.thread.times)
         self.thread.start()
         self.thread.start_clicking()
         if self.thread.times is not None:
