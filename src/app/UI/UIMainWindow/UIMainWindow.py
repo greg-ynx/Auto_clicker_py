@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
+import threading
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pynput.mouse import Button, Controller
 from config.definitions import img_dir
-from pynput.keyboard import Listener
+from pynput.keyboard import Listener, Key
 from src.app._Service.AutoClickerService import AutoClickerService
 from src.app._Service.ParametersService import ParametersService
 
@@ -30,6 +33,7 @@ class UIMainWindow(object):
         self.params = ParametersService()
         self.mouse = Controller()
         self.thread = None
+        self.listener = None
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(os.path.join(img_dir, "icon.ico")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -37,6 +41,7 @@ class UIMainWindow(object):
 
         self.main_centralWidget = QtWidgets.QWidget(MainWindow)
         self.main_centralWidget.setObjectName("main_centralWidget")
+
         self.verticalLayout = QtWidgets.QVBoxLayout(self.main_centralWidget)
         self.verticalLayout.setObjectName("verticalLayout")
 
@@ -237,7 +242,7 @@ class UIMainWindow(object):
         self.start_pushButton.setSizePolicy(sizePolicy)
         self.start_pushButton.setMinimumSize(QtCore.QSize(160, 45))
         self.start_pushButton.setObjectName("start_pushButton")
-        self.start_pushButton.clicked.connect(self.start)
+        self.start_pushButton.clicked.connect(self.click_start)
         self.startStop_gridLayout.addWidget(self.start_pushButton, 0, 0, 1, 1)
 
         self.stop_pushButton = QtWidgets.QPushButton(self.main_centralWidget)
@@ -258,6 +263,17 @@ class UIMainWindow(object):
 
         self.stop_pushButton.clicked.connect(self.stop)
 
+        self.thread = AutoClickerService(self.mouse,
+                                         self.params.click_interval,
+                                         self.params.mouse_button,
+                                         self.params.times,
+                                         self.params.click_type,
+                                         self.params.cursor_X,
+                                         self.params.cursor_Y)
+
+        self.listener = Listener(on_press=self.on_press)
+        self.listener.start()
+
         MainWindow.setCentralWidget(self.main_centralWidget)
 
         self.retranslateUi(MainWindow)
@@ -269,21 +285,49 @@ class UIMainWindow(object):
                self.secs_spinBox.value() + \
                self.ms_spinBox.value() * 10 ** (-3)
 
+    def on_press(self, key):
+        print('key pressed')
+        start_stop_key = Key.f6
+        if key == start_stop_key:
+            threading.Thread(target=self.hotkeyThread_start).start()
+
+    def hotkeyThread_start(self):
+        if self.thread.running:
+            self.stop()
+        else:
+            self.start()
+
+    def click_start(self):
+        if not self.thread.running:
+            threading.Thread(target=self.start).start()
+
     def start(self):
         self.start_pushButton.setEnabled(False)
         self.stop_pushButton.setEnabled(True)
-        self.setAllEnabled(False)
+        self.params = ParametersService()
         self.attribute_params()
-        self.thread = AutoClickerService(self.mouse, self.params.click_interval, self.params.mouse_button)
+        self.setAllEnabled(False)
+        self.thread = AutoClickerService(self.mouse,
+                                         self.params.click_interval,
+                                         self.params.mouse_button,
+                                         self.params.times,
+                                         self.params.click_type,
+                                         self.params.cursor_X,
+                                         self.params.cursor_Y)
+        print(self.params.times)
+        print(self.thread.times)
         self.thread.start()
-        with Listener(on_press=on_press) as listener:
-            listener.join()
+        self.thread.start_clicking()
+        if self.thread.times is not None:
+            while self.thread.running:
+                continue
+            self.stop()
 
     def stop(self):
         self.thread.exit()
+        self.setAllEnabled(True)
         self.stop_pushButton.setEnabled(False)
         self.start_pushButton.setEnabled(True)
-        self.setAllEnabled(True)
 
     def currentLocation_toggled(self):
         self.X_lineEdit.setReadOnly(True)
@@ -296,7 +340,7 @@ class UIMainWindow(object):
     def attribute_params(self):
         self.params.click_interval = self.seconds_count()
         self.params.mouse_button = self.params.mouseButton_switch(self.mouseButton_comboBox.currentText())
-        self.params.click_type = self.clickType_comboBox.currentText()
+        self.params.click_type = self.params.clickType_switch(self.clickType_comboBox.currentText())
         self.params.repeat_until_stopped = True
         if not self.repeatUntilStopped_radioButton.isChecked():
             self.params.repeat_until_stopped = False
@@ -308,19 +352,10 @@ class UIMainWindow(object):
             self.params.cursor_Y = self.Y_lineEdit.text()
 
     def setAllEnabled(self, state: bool):
-        self.hours_spinBox.setEnabled(state)
-        self.mins_spinBox.setEnabled(state)
-        self.secs_spinBox.setEnabled(state)
-        self.ms_spinBox.setEnabled(state)
-        self.mouseButton_comboBox.setEnabled(state)
-        self.clickType_comboBox.setEnabled(state)
-        self.repeat_radioButton.setEnabled(state)
-        self.repeat_spinBox.setEnabled(state)
-        self.repeatUntilStopped_radioButton.setEnabled(state)
-        self.currentLocation_radioButton.setEnabled(state)
-        self.customLocation_radioButton.setEnabled(state)
-        self.X_lineEdit.setEnabled(state)
-        self.Y_lineEdit.setEnabled(state)
+        self.clickInterval_groupBox.setEnabled(state)
+        self.clickOptions_groupBox.setEnabled(state)
+        self.clickRepeat_groupBox.setEnabled(state)
+        self.cursorPosition_groupBox.setEnabled(state)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

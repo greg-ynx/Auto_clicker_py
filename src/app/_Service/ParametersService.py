@@ -7,11 +7,14 @@ class ParametersService:
                  cursor_position=True, cursor_X=0, cursor_Y=0):
         self.click_interval = interval
         self.mouse_button = self.mouseButton_switch(mouse_button)
-        self.click_type = click_type
+        self.click_type = self.clickType_switch(click_type)
         self.repeat_until_stopped = repeat_until_stopped
+        self.times = None
         if not repeat_until_stopped:
             self.times = times
         self.cursor_position = cursor_position
+        self.cursor_X = None
+        self.cursor_Y = None
         if not self.cursor_position:
             self.cursor_X = cursor_X
             self.cursor_Y = cursor_Y
@@ -20,9 +23,9 @@ class ParametersService:
         try:
             match click_type:
                 case "Single":
-                    self.click_type = 1
+                    return 1
                 case "Double":
-                    self.click_type = 2
+                    return 2
                 case _:
                     raise AttributeError
         except AttributeError:
