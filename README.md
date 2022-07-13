@@ -1,7 +1,7 @@
 # Auto_clicker_py: Basic, Lightweight, Fast
 
 <p align="center">
-  <img width="437" height="372" src="readme/showcase.png">
+  <img width="437" height="372" src="readme/showcase.png" alt="Showcase Image">
 </p>
 
 This application is a simplified replica of "OP Auto Clicker 3.0" software.
